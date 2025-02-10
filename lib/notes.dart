@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/add_note.dart';
+import 'package:note_app/edit_notes.dart';
 import 'database.dart';
 import 'favorite_note_page.dart';
 import 'archieve.dart';
@@ -7,6 +8,7 @@ import 'archieve.dart';
 
 class Notes extends StatefulWidget {
   const Notes({super.key});
+
 
   @override
   State<Notes> createState() => NotesState();
@@ -70,7 +72,7 @@ class NotesState extends State<Notes> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ArchieveScreen()),
+                MaterialPageRoute(builder: (context) => ArchieveScreen()),
               );
             },
           ),
@@ -141,6 +143,13 @@ class NotesState extends State<Notes> {
     return Card(
       margin: const EdgeInsets.all(10),
       child: ListTile(
+        leading:IconButton(
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=>editnotes(text: note['Title'], note: note['Note'],id: note['id'],)));
+            },
+            icon: Icon(Icons.edit)
+        ),
         title:        Row(
           children: [
             Text(

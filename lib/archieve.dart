@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'database.dart';
+import 'notes.dart';
 
 
 class ArchieveScreen extends StatefulWidget {
-  const ArchieveScreen({super.key});
+   ArchieveScreen({super.key});
+
 
   @override
   State<ArchieveScreen> createState() => ArchieveScreenState();
@@ -12,6 +13,7 @@ class ArchieveScreen extends StatefulWidget {
 
 class ArchieveScreenState extends State<ArchieveScreen> {
   List<Map<String, dynamic>> archivedNotes = [];
+
 
   @override
   void initState() {
@@ -24,6 +26,17 @@ class ArchieveScreenState extends State<ArchieveScreen> {
     setState(() {
       archivedNotes = data ?? [];
     });
+  }
+  Future<void> unarchiveNote(int id) async{
+    try {
+      await DBHelper.updateArchivedStatus(id, 0);
+      setState(() {
+        archivedNotes.removeWhere((notes)=>notes['id']== id);
+      });
+    }
+    catch (e){
+      ;
+    }
   }
 
   @override
@@ -50,15 +63,34 @@ class ArchieveScreenState extends State<ArchieveScreen> {
               final note = archivedNotes[index];
               return Card(
                 margin: const EdgeInsets.all(10),
-                child: ListTile(
-                  title: Text(
-                    note['Title'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Dismissible(
+                  key: ValueKey(archivedNotes[index]['id']),
+                  direction: DismissDirection.endToStart ,
+                  background: Container(
+                    color: Colors.blue,
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20),
+                    child: Icon(Icons.archive,color: Colors.white,),
                   ),
-                  subtitle: Text(note['Note']),
+                  child: ListTile(
+                    title: Text(
+                      note['Title'],
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(note['Note']),
+                  ),
+                  onDismissed: (direction) {
+                    unarchiveNote(archivedNotes[index]['id']);
+                    fetchArchivedNotes();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Notes()));
+                  },
+
                 ),
               );
             },

@@ -16,7 +16,7 @@ class DBHelper {
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               Title TEXT,
               Note TEXT,
-              isFavorite INTEGER DEFAULT 0
+              isFavorite INTEGER DEFAULT 0,
               isArchived INTEGER DEFAULT 0
             )
           ''');
@@ -24,8 +24,6 @@ class DBHelper {
       );
 
       // Ensure isFavorite column exists in case the table was created before
-      await addFavoriteColumnIfNoteExists();
-      await addArchivedColumnIfNotExists();
     } catch (e) {
       print("Database creation error: $e");
     }
@@ -84,8 +82,8 @@ class DBHelper {
   static Future<void> deleteDB(int id) async {
     await db?.delete("notes",
 
-    where: "id = ?",
-    whereArgs: [id],
+      where: "id = ?",
+      whereArgs: [id],
     );
   }
   static Future<void> addArchivedColumnIfNotExists() async {
@@ -115,7 +113,15 @@ class DBHelper {
       print("Error fetching archived notes: $e");
       return null;
     }
-    }
+  }
+
+  static Future<void> updateDB(int id,String text,String note) async {
+    await db?.update("notes",
+      {"Title" : text, "Note" : note},
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
 
 
 
