@@ -37,7 +37,7 @@ class NotesState extends State<Notes> {
       });
     }
     catch (e){
-      ;
+      print(e);
     }
   }
 

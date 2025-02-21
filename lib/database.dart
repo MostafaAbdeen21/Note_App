@@ -40,7 +40,10 @@ class DBHelper {
 
   static Future<List<Map<String, dynamic>>?> getDataFromDB() async {
     try {
-      return await db?.query("notes");
+      return await db?.query("notes",
+          where: 'isArchived= ?',
+          whereArgs: [0]
+      );
     } catch (e) {
       print("Fetch error: $e");
       return null;

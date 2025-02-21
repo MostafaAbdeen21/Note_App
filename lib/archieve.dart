@@ -67,7 +67,7 @@ class ArchieveScreenState extends State<ArchieveScreen> {
                   key: ValueKey(archivedNotes[index]['id']),
                   direction: DismissDirection.endToStart ,
                   background: Container(
-                    color: Colors.blue,
+                    color: Colors.green,
                     alignment: Alignment.centerRight,
                     padding: EdgeInsets.only(right: 20),
                     child: Icon(Icons.archive,color: Colors.white,),
